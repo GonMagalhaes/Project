@@ -37,24 +37,9 @@ class CityViewModel(application: Application) : AndroidViewModel(application) {
         repository.deleteAll()
     }
 
-    // delete by city
-    fun deleteByCity(city: String) = viewModelScope.launch(Dispatchers.IO) {
-        repository.deleteByCity(city)
-    }
-
-    fun getCitiesByCountry(country: String): LiveData<List<City>> {
-        return repository.getCitiesByCountry(country)
-    }
-
-    fun getCountryFromCity(city: String): LiveData<City> {
-        return repository.getCountryFromCity(city)
-    }
-
     fun updateCity(city: City) = viewModelScope.launch {
         repository.updateCity(city)
     }
 
-    fun updateCountryFromCity(city: String, country: String) = viewModelScope.launch {
-        repository.updateCountryFromCity(city, country)
-    }
+
 }

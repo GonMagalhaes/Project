@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/insertcity"
+        android:hint="Inserir Cidade"
         android:inputType="textAutoComplete"
         android:textSize="18sp" />
 
@@ -18,7 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/insertcountry"
+        android:hint="Inserir País"
         android:inputType="textAutoComplete"
         android:textSize="18sp" />
 
@@ -26,7 +26,6 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:text="Save"
         />
 

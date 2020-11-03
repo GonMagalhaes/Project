@@ -34,4 +34,4 @@ class MainActivity2 : AppCompatActivity() {
         recycler_view.adapter?.notifyDataSetChanged()
 
     }
-}}
+}

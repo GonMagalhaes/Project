@@ -61,7 +61,7 @@ public abstract class CityDB : RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     CityDB::class.java,
-                    "cities_database",
+                    "cities_database"
                 )
                     //estratégia de destruição
                     .fallbackToDestructiveMigration()
