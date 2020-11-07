@@ -5,20 +5,29 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/city"
+        android:id="@+id/titulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:hint="Inserir Cidade"
+        android:hint="Inserir Título"
         android:inputType="textAutoComplete"
         android:textSize="18sp" />
 
     <EditText
-        android:id="@+id/country"
+        android:id="@+id/texto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-light"
-        android:hint="Inserir País"
+        android:hint="Inserir Texto"
+        android:inputType="textAutoComplete"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:hint="Inserir Data"
         android:inputType="textAutoComplete"
         android:textSize="18sp" />
 
@@ -26,7 +35,7 @@
         android:id="@+id/button_save"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="Guardar"
         />
 
 </LinearLayout>

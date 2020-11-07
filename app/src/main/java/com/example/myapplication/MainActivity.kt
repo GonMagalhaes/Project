@@ -13,13 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.example.myapplication.adapters.CityAdapter
-import com.example.myapplication.entities.City
-import com.example.myapplication.viewModel.CityViewModel
+import com.example.myapplication.adapters.NoteAdapter
+import com.example.myapplication.entities.Note
+import com.example.myapplication.viewModel.NoteViewModel
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var cityViewModel: CityViewModel
+    private lateinit var noteViewModel: NoteViewModel
     private val newWordActivityRequestCode = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,22 +27,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         // recycler view
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        val adapter = CityAdapter(this)
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        val adapter = NoteAdapter(this)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // view model
-        cityViewModel = ViewModelProvider(this).get(CityViewModel::class.java)
-        cityViewModel.allCities.observe(this, Observer { cities ->
+        noteViewModel = ViewModelProvider(this).get(NoteViewModel::class.java)
+        noteViewModel.allNotes.observe(this, Observer { notes ->
             // Update the cached copy of the words in the adapter.
-            cities?.let { adapter.setCities(it) }
+            notes?.let { adapter.setNotes(it) }
         })
 
         //Fab
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            val intent = Intent(this@MainActivity, AddCity::class.java)
+            val intent = Intent(this@MainActivity, AddNote::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
         }
 
@@ -52,18 +52,20 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
-            val pcity = data?.getStringExtra(AddCity.EXTRA_REPLY_CITY)
-            val pcountry = data?.getStringExtra(AddCity.EXTRA_REPLY_COUNTRY)
+            val ptitulo = data?.getStringExtra(AddNote.EXTRA_REPLY_TITULO)
+            val ptexto = data?.getStringExtra(AddNote.EXTRA_REPLY_TEXTO)
+            val pdata = data?.getStringExtra(AddNote.EXTRA_REPLY_DATA)
 
-            if (pcity!= null && pcountry != null) {
-                val city = City(city = pcity, country = pcountry)
-                cityViewModel.insert(city)
+
+            if (ptitulo!= null && ptexto != null && pdata != null) {
+                val note = Note(titulo = ptitulo, texto = ptexto, data = pdata )
+                noteViewModel.insert(note)
             }
 
         } else {
             Toast.makeText(
                 applicationContext,
-                "Não inseriu nenhuma cidade",
+                "Não inseriu nenhuma nota",
                 Toast.LENGTH_LONG).show()
         }
     }
@@ -79,14 +81,14 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.apagartudo -> {
-                cityViewModel.deleteAll()
+                noteViewModel.deleteAll()
                 true
             }
 
 
             R.id.alterar -> {
-                val city = City(id = 1, city = "xxx", country = "xxx")
-                cityViewModel.updateCity(city)
+                val note = Note(id = 1, titulo = "xxx", texto = "xxx", data = "xxx")
+                noteViewModel.updateNote(note)
                 true
             }
 

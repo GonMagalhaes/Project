@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.myapplication.dao.CityDao
-import com.example.myapplication.entities.City
+import com.example.myapplication.dao.NoteDao
+import com.example.myapplication.entities.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -15,10 +15,10 @@ import kotlinx.coroutines.launch
 // Note: When you modify the database schema, you'll need to update the version number and define a migration strategy
 //For a sample, a destroy and re-create strategy can be sufficient. But, for a real app, you must implement a migration strategy.
 
-@Database(entities = arrayOf(City::class), version = 8, exportSchema = false)
-public abstract class CityDB : RoomDatabase() {
+@Database(entities = arrayOf(Note::class), version = 8, exportSchema = false)
+public abstract class NoteDB : RoomDatabase() {
 
-    abstract fun cityDao(): CityDao
+    abstract fun noteDao(): NoteDao
 
     private class WordDatabaseCallback(
         private val scope: CoroutineScope
@@ -28,18 +28,18 @@ public abstract class CityDB : RoomDatabase() {
             super.onOpen(db)
             INSTANCE?.let { database ->
                 scope.launch {
-                    var cityDao = database.cityDao()
+                    var noteDao = database.noteDao()
 
                     // Delete all content here.
-                    cityDao.deleteAll()
+                    noteDao.deleteAll()
 
-                    // Add sample cities.
-                    var city = City(1, "Viana do Castelo", "Portugal")
-                    cityDao.insert(city)
-                    city = City(2, "Porto", "Portugal")
-                    cityDao.insert(city)
-                    city = City(3, "Aveiro", "Portugal")
-                    cityDao.insert(city)
+                    // Add sample notes.
+                    var note = Note(1, "Treino", "Corrida", "11/11/2010")
+                    noteDao.insert(note)
+                    note = Note(2, "Despesas", "Carro", "14/06/2019")
+                    noteDao.insert(note)
+                    note = Note(3, "Natal", "Comprar prendas", "01/05/2020")
+                    noteDao.insert(note)
 
                 }
             }
@@ -50,9 +50,9 @@ public abstract class CityDB : RoomDatabase() {
         // Singleton prevents multiple instances of database opening at the
         // same time.
         @Volatile
-        private var INSTANCE: CityDB? = null
+        private var INSTANCE: NoteDB? = null
 
-        fun getDatabase(context: Context, scope: CoroutineScope): CityDB {
+        fun getDatabase(context: Context, scope: CoroutineScope): NoteDB {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -60,8 +60,8 @@ public abstract class CityDB : RoomDatabase() {
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    CityDB::class.java,
-                    "cities_database"
+                    NoteDB::class.java,
+                    "notes_database"
                 )
                     //estratégia de destruição
                     .fallbackToDestructiveMigration()
