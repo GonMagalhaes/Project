@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), NoteAdapter.ItemClicked {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         // recycler view
         val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         val adapter = NoteAdapter(this)
