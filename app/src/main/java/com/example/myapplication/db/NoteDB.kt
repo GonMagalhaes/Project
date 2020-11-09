@@ -10,7 +10,7 @@ import com.example.myapplication.entities.Note
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-// Annotates class to be a Room Database with a table (entity) of the City class
+// Annotates class to be a Room Database with a table (entity) of the Note class
 
 // Note: When you modify the database schema, you'll need to update the version number and define a migration strategy
 //For a sample, a destroy and re-create strategy can be sufficient. But, for a real app, you must implement a migration strategy.

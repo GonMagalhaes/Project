@@ -14,7 +14,8 @@ class NoteAdapter internal constructor(
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var notes = emptyList<Note>() // Cached copy of cities
+    private var notes = emptyList<Note>() // Cached copy of notes
+    val activity  = context as ItemClicked
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tituloItemView: TextView = itemView.findViewById(R.id.titulo)
@@ -32,11 +33,17 @@ class NoteAdapter internal constructor(
         holder.tituloItemView.text = current.titulo
         holder.textoItemView.text = current.texto
         holder.dataItemView.text = current.data
+
+        holder.itemView.setOnClickListener(View.OnClickListener { activity.onClickListener(notes.get(position)) })
     }
 
     internal fun setNotes(notes: List<Note>) {
         this.notes = notes
         notifyDataSetChanged()
+    }
+
+    interface ItemClicked {
+        fun onClickListener(note: Note)
     }
 
     override fun getItemCount() = notes.size

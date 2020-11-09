@@ -17,10 +17,11 @@ import com.example.myapplication.adapters.NoteAdapter
 import com.example.myapplication.entities.Note
 import com.example.myapplication.viewModel.NoteViewModel
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NoteAdapter.ItemClicked {
 
     private lateinit var noteViewModel: NoteViewModel
     private val newWordActivityRequestCode = 1
+    private val UpdateNoteActivityRequestCode = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,24 +52,61 @@ class MainActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        val pdelete = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_DELETE)
+
         if (requestCode == newWordActivityRequestCode && resultCode == Activity.RESULT_OK) {
             val ptitulo = data?.getStringExtra(AddNote.EXTRA_REPLY_TITULO)
             val ptexto = data?.getStringExtra(AddNote.EXTRA_REPLY_TEXTO)
             val pdata = data?.getStringExtra(AddNote.EXTRA_REPLY_DATA)
 
 
-            if (ptitulo!= null && ptexto != null && pdata != null) {
-                val note = Note(titulo = ptitulo, texto = ptexto, data = pdata )
+            if (ptitulo != null && ptexto != null && pdata != null) {
+                val note = Note(titulo = ptitulo, texto = ptexto, data = pdata)
                 noteViewModel.insert(note)
             }
 
-        } else {
-            Toast.makeText(
-                applicationContext,
-                "Não inseriu nenhuma nota",
-                Toast.LENGTH_LONG).show()
-        }
+        } else if (requestCode == UpdateNoteActivityRequestCode && resultCode == Activity.RESULT_OK && pdelete == "update") {
+            val pid = data?.getIntExtra(com.example.myapplication.Update.EXTRA_REPLY_ID, -1)
+            val ptitulo = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_TITULO)
+            val ptexto = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_TEXTO)
+            val pdata = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_DATA)
+
+
+            if (pid != null && ptitulo != null && ptexto != null && pdata != null) {
+                val note = Note(id = pid, titulo = ptitulo, texto = ptexto, data = pdata)
+                noteViewModel.updateNote(note)
+            }
+            } else if (pdelete == "delete") {
+            val pid = data?.getIntExtra(com.example.myapplication.Update.EXTRA_REPLY_ID, -1)
+            val ptitulo = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_TITULO)
+            val ptexto = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_TEXTO)
+            val pdata = data?.getStringExtra(com.example.myapplication.Update.EXTRA_REPLY_DATA)
+
+
+            if (pid != null && ptitulo != null && ptexto != null && pdata != null) {
+                val note = Note(id = pid, titulo = ptitulo, texto = ptexto, data = pdata)
+                noteViewModel.deleteNote(note)
+            }
+            }   else {
+                        Toast.makeText(
+                                applicationContext,
+                                "Não inseriu nenhuma nota",
+                                Toast.LENGTH_LONG).show()
+            }
     }
+
+    override fun onClickListener(note: Note) {
+        val intent = Intent(this, Update::class.java)
+
+        intent.putExtra("id", note.id)
+        intent.putExtra("titulo", note.titulo)
+        intent.putExtra("texto", note.texto)
+        intent.putExtra("data", note.data)
+
+        startActivityForResult(intent, UpdateNoteActivityRequestCode)
+    }
+
+
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
