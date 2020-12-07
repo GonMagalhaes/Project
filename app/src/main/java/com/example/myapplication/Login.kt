@@ -1,14 +1,22 @@
 package com.example.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myapplication.adapters.NoteAdapter
+import com.example.myapplication.api.EndPoints
+import com.example.myapplication.api.OutputPost
+import com.example.myapplication.api.ServiceBuilder
+import com.example.myapplication.api.User
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class Login : AppCompatActivity() {
@@ -18,11 +26,33 @@ class Login : AppCompatActivity() {
 }
 
     fun logar(view: View) {
-        val intent = Intent(this@Login, MapsActivity::class.java)
-        startActivity(intent)
+        val user = user.text.toString()
+        val password = password.text.toString()
+
+        val request = ServiceBuilder.buildService(EndPoints::class.java)
+        val call = request.postLogin(user, password)
+
+        call.enqueue(object : Callback<OutputPost>{
+            override fun onResponse(call: Call<OutputPost>, response: Response<OutputPost>) {
+                if (response.isSuccessful){
+                    if (response.body()?.error == false) {
+                        val c: OutputPost = response.body()!!
+                        Toast.makeText(this@Login, "Login Falhou.", Toast.LENGTH_SHORT).show()
+                    } else {
+                        val intent = Intent(this@Login, MapsActivity::class.java)
+                        Toast.makeText(this@Login, "Login Efetuado.", Toast.LENGTH_SHORT).show()
+                        startActivity(intent)
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<OutputPost>, t: Throwable) {
+                Toast.makeText(this@Login, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
-    fun notas(view: View) {
+    fun notes(view: View) {
         val intent = Intent(this@Login, MainActivity::class.java)
         startActivity(intent)
     }
