@@ -5,3 +5,10 @@ data class User(
         val user: String,
         val password: String
 )
+data class Problem(
+        val id: Int,
+        val lat: String,
+        val lng: String,
+        val description: String,
+        val IdUser: Int
+)
